@@ -1,0 +1,39 @@
+{
+  "name": "cl_helper_2",
+  "productName": "CL Helper 2",
+  "version": "0.1.0",
+  "description": "CL Helper in Electron",
+  "main": "./out/main",
+  "scripts": {
+    "start": "electron .",
+    "compile": "tsc -p ./",
+    "runCompile": "tsc -p --watch ./",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Samuel Murphy",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.6.6",
+    "core-js": "^2.5.1",
+    "crossroads": "^0.12.2",
+    "dateformat": "^3.0.2",
+    "electron": "latest",
+    "events": "latest",
+    "express": "^4.16.2",
+    "google": "^2.1.0",
+    "google-auth-library": "^0.11.0",
+    "googleapis": "^22.2.0",
+    "hasher": "^1.2.0",
+    "jquery": "^3.2.1",
+    "localStorage": "^1.0.3",
+    "nedb": "^1.8.0",
+    "rxjs": "^5.5.2",
+    "store": "^2.0.12",
+    "typescript": "latest",
+    "websocket": "latest",
+    "xmlhttprequest": "latest"
+  },
+  "devDependencies": {
+    "pkginfo": "^0.4.1"
+  }
+}

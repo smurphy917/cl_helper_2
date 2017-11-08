@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es2017",
+        "outDir": "out",
+        "lib": [
+            "es2017",
+            "dom",
+            "es2017.object"
+        ],
+        "sourceMap": true,
+        "rootDir": "./src"
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

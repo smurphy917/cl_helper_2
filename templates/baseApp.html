@@ -1,0 +1,135 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 main">
+            <!--a style="display:none;" id="openAuthInput" data-bind="click:function(){authInputOpen(true);}">&nbsp;</a-->
+            <div id="dangerAlert" class="alert alert-danger alert-dismissable fade in" role="alert" style="display:none;">
+                <button type="button" class="close" ng-click="alerts.danger.slideUp();" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <span>{{alertData.danger.body}}</span>
+            </div>
+            <div id="successAlert" class="alert alert-success alert-dismissable fade in" role="alert" style="display:none;">
+                <button type="button" class="close" ng-click="alerts.success.slideUp()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <strong>{{alertData.success.title}}</strong>
+                <span>{{alertData.success.body}}</span>
+                <!-- ko if: alertData().success.button -->
+                <button type="button" class="btn btn-default" ng-show="alertData().success.button.enabled" ng-click="alertData.success.button.target">{{alertData.success.button.text}}</button>
+                <!-- /ko -->
+            </div>
+            <h1 class="page-header">Status:
+                <span>{{status}}</span>
+            </h1>
+            <div class="container-fluid">
+                <div ng-if="status!=='Running' && status!=='Paused'" class="panel-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4>Start/Stop</h4>
+                        </div>
+                        <div class="panel-body">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="accountsSelect" class="control-label col-xs-3">Accounts:</label>
+                                    <div class="col-xs-6">
+                                        <select id="accountsSelect" class="form-control" ng-model="data.selectedAccounts" ng-options="account as account.email for account in data.accounts" data-multiselect="{includeSelectAllOption: true, disableIfEmpty: true, buttonWidth: '100%'}"
+                                            data-role="multiselect"
+                                            multiple="multiple"></select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-xs-3" for="period-select">Repost every:</label>
+                                    <div class="col-xs-6">
+                                        <select class="form-control" name="period-select" ng-model="period" ng-options="option.value as option.name for option in periodOptions"></select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-4 col-xs-offset-3">
+                                        <button name="start" class="btn btn-primary" ng-click="start()">Start</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" data-toggle="collapse" data-target="#user-mgmt-panel">
+                            <h4 class="panel-title">
+                                <a href="#">Manage Accounts</a>
+                            </h4>
+                        </div>
+                        <div id="user-mgmt-panel" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <form class="form-horizontal">
+                                    <div ng-if="selectedAccounts.length" class="form-group">
+                                        <div class="col-xs-4 col-xs-offset-3">
+                                            <button class="btn btn-danger" name="delete_users" ng-click="deleteUsers()">{{selectedUsers().length === 1 ? 'Delete Selected Account' : 'Delete Selected Accounts'"}}</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-3" for="user">Email:</label>
+                                        <div class="col-xs-9">
+                                            <input class="form-control" id="user" type="text" ng-model="data.newAccount.email" placeholder="craigslist account email...">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label" for="passwd">Password:</label>
+                                        <div class="col-xs-9">
+                                            <input class="form-control" name="passwd" ng-model="data.newAccount.password" type="password">
+                                        </div>
+                                    </div>
+                                    <div ng-if="!newAccount.user.endsWith('@gmail.com')" class="form-group">
+                                        <label class="control-label col-xs-3" for="gmailAccountSelect">Google Account:</label>
+                                        <div class="col-xs-5">
+                                            <select class="form-control" id="gmailAccountSelect" class="form-control" ng-model="data.newAccount.google_email" ng-options="google_account.email for google_account in data.google_accounts" data-multiselect="{ disableIfEmpty: true, disabledText: 'No Google accounts available', buttonWidth: '100%'}"></select>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <button class="btn btn-success btn-block" name="addGoogleAccount" ng-click="add_google_account()">Add Google Account</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-8 col-xs-offset-3">
+                                            <button class="btn btn-primary" name="add_user" ng-click="add_account()">Add User</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="authInputOpen">
+                    <label for="authCode" name="authCodeLabel">Paste access code:</label>
+                    <input name="authCode" ng-model="authCode">
+                    <button name="completeAuth" ng-click="complete_auth()">Complete Authorization</button>
+                </div>
+                <button ng-if="status=='Running'" class="btn btn-primary" name="pause" ng-click="pause()">Pause</button>
+                <button ng-if="status=='Paused'" class="btn btn-primary" name="resume" ng-click="resume()">Resume</button>
+                
+
+            </div>
+
+            <h2 class="sub-header">Recent Reposts</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date/Time</th>
+                            <th>Account</th>
+                            <th>Title</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="post in posts">
+                            <td>{{post.last_update * 1000 | date: 'MM/dd/yyyy hh:mm:ss a'}}</td>
+                            <td>{{post.account ? post.account : ''}}</td>
+                            <td>
+                                <a target="_blank" ng-href="post.href">{{post.title}}</a>
+                            </td>
+                            <td>{{post.status}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
